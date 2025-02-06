@@ -14,7 +14,7 @@ rectangle "Navegação"{
 
 cliente --> UC1
 UC1 --> UC2
-UC2 <. UC3 : <<extend>>
+UC2 <.left. UC3 : <<extend>>
 UC2 <. UC4 : <<extend>>
 locador --> UC5
 @enduml
