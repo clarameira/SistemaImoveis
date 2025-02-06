@@ -5,11 +5,11 @@ left to right direction
 :Locador: as locador
 
 rectangle "Reservas"{
-usecase "Verificar informações do imóvel" as UC6
-usecase "Selecionar para reserva online" as UC7
-usecase "Selecionar método de pagamento" as UC8
-usecase "Solicitar reembolso ou cancelamento" as UC9
-usecase "Gerenciar reservas" as UC10
+(Verificar informações do imóvel) as UC6
+(Selecionar para reserva online) as UC7
+(Selecionar método de pagamento) as UC8
+(Solicitar reembolso ou cancelamento) as UC9
+(Gerenciar reservas) as UC10
 }
 
 cliente --> UC6
