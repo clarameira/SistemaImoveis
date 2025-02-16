@@ -1,0 +1,73 @@
+@startuml "Gerenciamento de Imóveis - Locador"
+hide footbox
+
+actor Locador as locador
+participant "Tela de Gerenciamento de Imóveis" as tela_gerenciamento
+participant "Controle de Imóveis" as controle_imoveis
+participant "Controle de Reservas" as controle_reservas
+participant "Imóvel" as imovel
+participant "Reserva" as reserva
+database "Banco de Dados" as bd
+
+locador -> tela_gerenciamento: acessarGerenciamentoImoveis(): void
+activate tela_gerenciamento
+tela_gerenciamento -> controle_imoveis: obterListaImoveis(): List<Imovel>
+activate controle_imoveis
+
+controle_imoveis -> bd: consultarImoveisLocador(): List<Imovel>
+activate bd
+bd --> controle_imoveis: List<Imovel>
+deactivate bd
+
+controle_imoveis --> tela_gerenciamento: List<Imovel>
+deactivate controle_imoveis
+
+tela_gerenciamento -> locador: exibirListaImoveis(listaImoveis: List<Imovel>): void
+
+alt Locador deseja adicionar um imóvel
+    locador -> tela_gerenciamento: adicionarImovel(dados: Imovel): void
+    tela_gerenciamento -> controle_imoveis: adicionarImovel(dados: Imovel): boolean
+    activate controle_imoveis
+
+    controle_imoveis -> bd: inserirImovel(dados: Imovel): boolean
+    activate bd
+    bd --> controle_imoveis: true
+    deactivate bd
+
+    controle_imoveis -> imovel: criarInstancia(dados: Imovel): boolean
+    activate imovel
+    imovel --> controle_imoveis: true
+    deactivate imovel
+
+    controle_imoveis --> tela_gerenciamento: true
+    deactivate controle_imoveis
+
+    tela_gerenciamento -> locador: exibirMensagem("Imóvel adicionado com sucesso"): void
+end
+
+alt Locador deseja gerenciar reservas
+    locador -> tela_gerenciamento: gerenciarReservas(): void
+    tela_gerenciamento -> controle_reservas: obterReservas(): List<Reserva>
+    activate controle_reservas
+
+    controle_reservas -> bd: consultarReservas(): List<Reserva>
+    activate bd
+    bd --> controle_reservas: List<Reserva>
+    deactivate bd
+
+    controle_reservas --> tela_gerenciamento: List<Reserva>
+    deactivate controle_reservas
+
+    tela_gerenciamento -> locador: exibirListaReservas(listaReservas: List<Reserva>): void
+
+    locador -> tela_gerenciamento: atualizarStatusReserva(id_reserva: String, status: String): void
+    tela_gerenciamento -> controle_reservas: atualizarStatusReserva(id_reserva: String, status: String): boolean
+    controle_reservas -> reserva: atualizarStatus(status: String): boolean
+    reserva --> controle_reservas: true
+    controle_reservas --> tela_gerenciamento: true
+    tela_gerenciamento -> locador: exibirMensagem("Status atualizado com sucesso"): void
+end
+
+deactivate tela_gerenciamento
+
+@enduml

@@ -1,0 +1,51 @@
+@startuml "Visualizar Imóveis - Cliente"
+hide footbox
+
+actor Cliente as cliente
+participant "Tela Principal" as tela_principal
+participant "Controle de Imóveis" as controle_imoveis
+participant "Imóvel" as imovel
+database "Banco de Dados" as bd
+
+cliente -> tela_principal: pesquisarImoveis(filtros: String): void
+activate tela_principal
+
+tela_principal -> controle_imoveis: buscarImoveis(filtros: String): List<Imovel>
+activate controle_imoveis
+
+controle_imoveis -> bd: consultarImoveis(filtros: String): List<Imovel>
+activate bd
+bd --> controle_imoveis: List<Imovel>
+deactivate bd
+
+controle_imoveis --> tela_principal: List<Imovel>
+deactivate controle_imoveis
+
+alt Imóveis encontrados?
+    tela_principal -> cliente: exibirListaImoveis(listaImoveis: List<Imovel>): void
+else Nenhum imóvel encontrado
+    tela_principal -> cliente: exibirMensagem(mensagem: String): void
+end
+
+cliente -> tela_principal: selecionarImovel(id_imovel: String): void
+tela_principal -> controle_imoveis: buscarDetalhesImovel(id_imovel: String): Imovel
+activate controle_imoveis
+
+controle_imoveis -> bd: consultarDetalhes(id_imovel: String): Imovel
+activate bd
+bd --> controle_imoveis: Imovel
+deactivate bd
+
+controle_imoveis -> imovel: criarInstancia(dadosImovel: Imovel): void
+activate imovel
+imovel --> controle_imoveis: instanciaCriada: boolean
+deactivate imovel
+
+controle_imoveis --> tela_principal: Imovel
+deactivate controle_imoveis
+
+tela_principal -> cliente: exibirDetalhesImovel(detalhesImovel: Imovel): void
+
+deactivate tela_principal
+
+@enduml
