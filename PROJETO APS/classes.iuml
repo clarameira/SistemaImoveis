@@ -1,83 +1,129 @@
 @startuml
-left to right direction
 
-class Usuario {
-    +id: int
+class Locador {
+    +id: Integer
     +nome: String
     +email: String
     +senha: String
-    +tipo: String
-    +criarConta()
-    +editarConta()
-    +removerConta()
+    +gerenciarImoveis(): void
+    +gerenciarReservas(): void
 }
 
-class Locador {
-    +id: int
-    +usuario: Usuario
-    +cadastrarImovel()
-    +editarImovel()
-    +removerImovel()
-}
-
-class Locatario {
-    +id: int
-    +usuario: Usuario
-    +fazerReserva()
-    +cancelarReserva()
+class Cliente {
+    +id: Integer
+    +nome: String
+    +email: String
+    +senha: String
+    +pesquisarImoveis(filtros: String): List<Imovel>
+    +reservarImovel(id_imovel: String, datas: List<String>): void
 }
 
 class Imovel {
-    +id: int
-    +tipo: String
-    +localizacao: String
-    +preco: double
-    +quartos: int
-    +banheiros: int
+    +id: Integer
+    +titulo: String
     +descricao: String
-    +cadastrar()
-    +editar()
-    +remover()
+    +endereco: String
+    +preco: Float
+    +locador: Locador
+    +getDetalhes(): Imovel
 }
 
 class Reserva {
-    +id: int
-    +locatario: Locatario
+    +id: Integer
     +imovel: Imovel
-    +dataInicio: Date
-    +dataFim: Date
+    +cliente: Cliente
+    +data_inicio: Date
+    +data_fim: Date
     +status: String
-    +verificarDisponibilidade()
-    +confirmar()
-    +cancelar()
+    +atualizarStatus(status: String): void
 }
 
 class Pagamento {
-    +id: int
+    +id: Integer
     +reserva: Reserva
-    +metodoPagamento: String
+    +metodo: String
     +status: String
-    +realizarPagamento()
-    +emitirComprovante()
-    +solicitarReembolso()
+    +processarPagamento(dados: String): Boolean
 }
 
-class Avaliacao {
-    +id: int
-    +locatario: Locatario
-    +imovel: Imovel
-    +comentario: String
-    +nota: int
-    +publicar()
+class ControleImovel {
+    +obterListaImoveis(): List<Imovel>
+    +adicionarImovel(dados: Imovel): Boolean
+    +buscarDetalhesImovel(id_imovel: String): Imovel
 }
 
-Usuario <|-- Locador
-Usuario <|-- Locatario
-Locador "1" -- "*" Imovel: possui >
-Locatario "1" -- "*" Reserva: faz >
-Imovel "1" -- "*" Reserva: possui >
-Reserva "1" -- "1" Pagamento: gera >
-Locatario "1" -- "*" Avaliacao: escreve >
-Imovel "1" -- "*" Avaliacao: recebe >
+class ControleReserva {
+    +obterReservas(): List<Reserva>
+    +atualizarStatusReserva(id_reserva: Integer, status: String): Boolean
+    +reservarImovel(id_imovel: Integer, datas: List<String>): Boolean
+}
+
+class ControlePagamento {
+    +processarPagamento(dados: String): Boolean
+}
+
+class BancoDeDados {
+    +consultarImoveis(filtros: String): List<Imovel>
+    +inserirImovel(dados: Imovel): Boolean
+    +consultarDetalhes(id_imovel: Integer): Imovel
+    +consultarReservas(): List<Reserva>
+    +processarPagamento(dados: String): Boolean
+}
+
+class TelaLogin {
+    +autenticarUsuario(email: String, senha: String): Boolean
+}
+
+class TelaCadastro {
+    +cadastrarUsuario(dados: String): Boolean
+}
+
+class TelaPrincipal {
+    +pesquisarImoveis(filtros: String): void
+    +exibirListaImoveis(listaImoveis: List<Imovel>): void
+    +exibirMensagem(mensagem: String): void
+}
+
+class TelaDetalhesImovel {
+    +selecionarImovel(id_imovel: String): void
+    +exibirDetalhesImovel(detalhesImovel: Imovel): void
+    +realizarReserva(id_imovel: String, datas: List<String>): void
+}
+
+class TelaGerenciamentoImoveis {
+    +acessarGerenciamentoImoveis(): void
+    +exibirListaImoveis(listaImoveis: List<Imovel>): void
+    +exibirMensagem(mensagem: String): void
+}
+
+class TelaGerenciamentoReservas {
+    +acessarGerenciamentoReservas(): void
+    +exibirListaReservas(listaReservas: List<Reserva>): void
+    +atualizarStatusReserva(id_reserva: String, status: String): void
+}
+
+class TelaPagamento {
+    +realizarPagamento(dados: String): Boolean
+}
+
+Locador "1" -- "*" Imovel: possui
+Cliente "1" -- "*" Reserva: faz
+Reserva "1" -- "1" Imovel: refere-se
+Reserva "1" -- "1" Pagamento: tem
+Imovel "*" -- "1" ControleImovel: gerenciado por
+Reserva "*" -- "1" ControleReserva: gerenciado por
+Pagamento "*" -- "1" BancoDeDados: processado por
+ControleImovel "1" -- "1" BancoDeDados: consulta
+ControleReserva "1" -- "1" BancoDeDados: consulta
+ControlePagamento "1" -- "1" BancoDeDados: consulta
+
+TelaLogin "1" -- "1" BancoDeDados: consulta
+TelaCadastro "1" -- "1" BancoDeDados: insere
+TelaPrincipal "1" -- "1" ControleImovel: interage
+TelaDetalhesImovel "1" -- "1" ControleImovel: interage
+TelaDetalhesImovel "1" -- "1" ControleReserva: interage
+TelaGerenciamentoImoveis "1" -- "1" ControleImovel: interage
+TelaGerenciamentoReservas "1" -- "1" ControleReserva: interage
+TelaPagamento "1" -- "1" ControlePagamento: interage
 
 @enduml
