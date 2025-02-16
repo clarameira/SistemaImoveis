@@ -7,13 +7,15 @@ participant "Controle de Imóveis" as controle_imoveis
 participant "Imóvel" as imovel
 database "Banco de Dados" as bd
 
-cliente -> tela_principal: pesquisarImoveis(filtros: String): void
+== Cliente pesquisa imóveis ==
+
+cliente -> tela_principal: pesquisarImoveis(filtros: String)
 activate tela_principal
 
-tela_principal -> controle_imoveis: buscarImoveis(filtros: String): List<Imovel>
+tela_principal -> controle_imoveis: obterImoveis(filtros: String)
 activate controle_imoveis
 
-controle_imoveis -> bd: consultarImoveis(filtros: String): List<Imovel>
+controle_imoveis -> bd: consultarImoveis(filtros: String)
 activate bd
 bd --> controle_imoveis: List<Imovel>
 deactivate bd
@@ -22,29 +24,26 @@ controle_imoveis --> tela_principal: List<Imovel>
 deactivate controle_imoveis
 
 alt Imóveis encontrados?
-    tela_principal -> cliente: exibirListaImoveis(listaImoveis: List<Imovel>): void
+    tela_principal -> cliente: exibirListaImoveis(listaImoveis: List<Imovel>)
 else Nenhum imóvel encontrado
-    tela_principal -> cliente: exibirMensagem(mensagem: String): void
+    tela_principal -> cliente: exibirMensagem("Nenhum imóvel encontrado")
 end
 
-cliente -> tela_principal: selecionarImovel(id_imovel: String): void
-tela_principal -> controle_imoveis: buscarDetalhesImovel(id_imovel: String): Imovel
+== Cliente seleciona imóvel para detalhes ==
+
+cliente -> tela_principal: selecionarImovel(idImovel: Integer)
+tela_principal -> controle_imoveis: buscarDetalhesImovel(idImovel: Integer)
 activate controle_imoveis
 
-controle_imoveis -> bd: consultarDetalhes(id_imovel: String): Imovel
+controle_imoveis -> bd: consultarDetalhes(idImovel: Integer)
 activate bd
 bd --> controle_imoveis: Imovel
 deactivate bd
 
-controle_imoveis -> imovel: criarInstancia(dadosImovel: Imovel): void
-activate imovel
-imovel --> controle_imoveis: instanciaCriada: boolean
-deactivate imovel
-
 controle_imoveis --> tela_principal: Imovel
 deactivate controle_imoveis
 
-tela_principal -> cliente: exibirDetalhesImovel(detalhesImovel: Imovel): void
+tela_principal -> cliente: exibirDetalhesImovel(detalhesImovel: Imovel)
 
 deactivate tela_principal
 

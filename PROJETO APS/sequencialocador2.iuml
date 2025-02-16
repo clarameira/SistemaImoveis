@@ -45,12 +45,44 @@ alt Locador deseja adicionar um imóvel
     tela_gerenciamento -> locador: exibirMensagem("Imóvel adicionado com sucesso"): void
 end
 
+alt Locador deseja editar um imóvel
+    locador -> tela_gerenciamento: editarImovel(id_imovel: Integer, dadosAtualizados: Imovel): void
+    tela_gerenciamento -> controle_imoveis: atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): boolean
+    activate controle_imoveis
+
+    controle_imoveis -> bd: atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): boolean
+    activate bd
+    bd --> controle_imoveis: true
+    deactivate bd
+
+    controle_imoveis --> tela_gerenciamento: true
+    deactivate controle_imoveis
+
+    tela_gerenciamento -> locador: exibirMensagem("Imóvel atualizado com sucesso"): void
+end
+
+alt Locador deseja remover um imóvel
+    locador -> tela_gerenciamento: removerImovel(id_imovel: Integer): void
+    tela_gerenciamento -> controle_imoveis: removerImovel(id_imovel: Integer): boolean
+    activate controle_imoveis
+
+    controle_imoveis -> bd: deletarImovel(id_imovel: Integer): boolean
+    activate bd
+    bd --> controle_imoveis: true
+    deactivate bd
+
+    controle_imoveis --> tela_gerenciamento: true
+    deactivate controle_imoveis
+
+    tela_gerenciamento -> locador: exibirMensagem("Imóvel removido com sucesso"): void
+end
+
 alt Locador deseja gerenciar reservas
     locador -> tela_gerenciamento: gerenciarReservas(): void
     tela_gerenciamento -> controle_reservas: obterReservas(): List<Reserva>
     activate controle_reservas
 
-    controle_reservas -> bd: consultarReservas(): List<Reserva>
+    controle_reservas -> bd: consultarReservasLocador(): List<Reserva>
     activate bd
     bd --> controle_reservas: List<Reserva>
     deactivate bd
@@ -62,9 +94,16 @@ alt Locador deseja gerenciar reservas
 
     locador -> tela_gerenciamento: atualizarStatusReserva(id_reserva: String, status: String): void
     tela_gerenciamento -> controle_reservas: atualizarStatusReserva(id_reserva: String, status: String): boolean
+    activate controle_reservas
+
     controle_reservas -> reserva: atualizarStatus(status: String): boolean
+    activate reserva
     reserva --> controle_reservas: true
+    deactivate reserva
+
     controle_reservas --> tela_gerenciamento: true
+    deactivate controle_reservas
+
     tela_gerenciamento -> locador: exibirMensagem("Status atualizado com sucesso"): void
 end
 
