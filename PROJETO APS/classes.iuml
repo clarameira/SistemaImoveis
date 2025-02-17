@@ -62,9 +62,14 @@ class ControleReserva {
     +obterReservas(): List<Reserva>
     +atualizarStatusReserva(id_reserva: Integer, status: String): Boolean
     +reservarImovel(id_imovel: Integer, datas: List<String>): Boolean
+    +inserirReserva(dados: Reserva): Boolean
+    +editarReserva(id_reserva: Integer, dadosAtualizados: Reserva): Boolean
+    +removerReserva(id_reserva: Integer): Boolean
+    +listarReservas(): List<Reserva>
 }
 
 class ControlePagamento {
+    +adicionarMetodoDePagamento(dados: String): Boolean
     +processarPagamento(dados: String): Boolean
 }
 
@@ -74,18 +79,28 @@ class ControleLogin {
 
 class ControleCadastro {
     +cadastrarUsuario(dados: Cliente | Locador): Boolean
+    +inserirUsuario(dados: Cliente | Locador): Boolean
+    +editarUsuario(id_usuario: Integer, dadosAtualizados: Cliente | Locador): Boolean
+    +removerUsuario(id_usuario: Integer): Boolean
+    +listarUsuarios(): List<Cliente | Locador>
 }
 
 class BancoDeDados {
-    +consultarImoveis(filtros: String): List<Imovel>
+   +consultarImoveis(filtros: String): List<Imovel>
     +inserirImovel(dados: Imovel): Boolean
     +atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): Boolean
     +deletarImovel(id_imovel: Integer): Boolean
     +consultarDetalhes(id_imovel: Integer): Imovel
     +consultarReservas(): List<Reserva>
+    +inserirReserva(dados: Reserva): Boolean
+    +atualizarReserva(id_reserva: Integer, dadosAtualizados: Reserva): Boolean
+    +deletarReserva(id_reserva: Integer): Boolean
     +processarPagamento(dados: String): Boolean
     +verificarCredenciais(email: String, senha: String): Boolean
     +salvarUsuario(dados: Cliente | Locador): Boolean
+    +editarUsuario(id_usuario: Integer, dadosAtualizados: Cliente | Locador): Boolean
+    +deletarUsuario(id_usuario: Integer): Boolean
+    +listarUsuarios(): List<Cliente | Locador>
 }
 
 class TelaGerenciamentoImoveis {
@@ -122,9 +137,7 @@ class TelaPagamento {
     +exibirMensagem(mensagem: String): void
 }
 
-Locador "1" -- "*" ControleImovel: gerencia
 Reserva "1" -- "1" Imovel: refere-se
-Reserva "1" -- "1" Pagamento: tem
 Imovel "*" -- "1" ControleImovel: gerenciado por
 Reserva "*" -- "1" ControleReserva: gerenciado por
 Pagamento "*" -- "1" ControlePagamento: processado por
@@ -140,6 +153,7 @@ TelaDetalhesImovel "1" -- "1" ControleImovel: interage
 TelaDetalhesImovel "1" -- "1" ControleReserva: interage
 TelaLogin "1" -- "1" ControleLogin: interage
 TelaCadastro "1" -- "1" ControleCadastro: interage
+TelaPagamento "1" -- "1" Pagamento: interage
 TelaPagamento "1" -- "1" ControlePagamento: interage
 
 Cliente "1" -- "1" TelaDetalhesImovel: acessa
