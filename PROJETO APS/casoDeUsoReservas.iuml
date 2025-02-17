@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+
+:Cliente: as cliente
+:Locador: as locador
+
+rectangle "Reservas"{
+(Verificar informações do imóvel) as UC6
+(Selecionar para reserva online) as UC7
+(Selecionar método de pagamento) as UC8
+(Solicitar reembolso ou cancelamento) as UC9
+(Gerenciar reservas) as UC10
+}
+
+cliente --> UC6
+UC6 <. UC7 : <<extend>>
+UC7 -down.> UC8 : <<include>>
+UC8 <. UC9 : <<extend>>
+locador --> UC10
+
+@enduml

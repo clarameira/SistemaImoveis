@@ -1,0 +1,20 @@
+@startuml
+left to right direction 
+
+:Cliente: as cliente
+:Locador: as locador
+
+rectangle "Navegação"{
+(Pesquisar imóveis) as UC1
+(visualizar resultados de busca) as UC2
+(Visualizar avaliações e comentários) as UC3
+(Visualizar informações de contato do locador) as UC4
+(Gerenciar imóveis) as UC5
+}
+
+cliente --> UC1
+UC1 --> UC2
+UC2 <.left. UC3 : <<extend>>
+UC2 <. UC4 : <<extend>>
+locador --> UC5
+@enduml
