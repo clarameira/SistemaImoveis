@@ -29,7 +29,6 @@ class Imovel {
     +descricao: String
     +endereco: String
     +preco: Float
-    +locador: Locador
     +getDetalhes(): Imovel
 }
 
@@ -123,7 +122,7 @@ class TelaPagamento {
     +exibirMensagem(mensagem: String): void
 }
 
-Locador "1" -- "*" Imovel: possui
+Locador "1" -- "*" ControleImovel: gerencia
 Reserva "1" -- "1" Imovel: refere-se
 Reserva "1" -- "1" Pagamento: tem
 Imovel "*" -- "1" ControleImovel: gerenciado por
