@@ -2,20 +2,20 @@
 hide footbox
 
 actor Cliente as cliente
-participant "Tela Principal" as tela_principal
-participant "Controle de Imóveis" as controle_imoveis
-participant "Imóvel" as imovel
-database "Banco de Dados" as bd
+participant "TelaPrincipal" as tela_principal
+participant "TelaDetalhesImovel" as tela_detalhes
+participant "ControleImoveis" as controle_imoveis
+database "BancoDeDados" as bd
 
 == Cliente pesquisa imóveis ==
 
-cliente -> tela_principal: pesquisarImoveis(filtros: String)
+cliente -> tela_principal: pesquisarImoveis(filtros: String): void
 activate tela_principal
 
-tela_principal -> controle_imoveis: obterImoveis(filtros: String)
+tela_principal -> controle_imoveis: obterListaImoveis(filtros: String): List<Imovel>
 activate controle_imoveis
 
-controle_imoveis -> bd: consultarImoveis(filtros: String)
+controle_imoveis -> bd: consultarImoveis(filtros: String): List<Imovel>
 activate bd
 bd --> controle_imoveis: List<Imovel>
 deactivate bd
@@ -23,28 +23,30 @@ deactivate bd
 controle_imoveis --> tela_principal: List<Imovel>
 deactivate controle_imoveis
 
-alt Imóveis encontrados?
-    tela_principal -> cliente: exibirListaImoveis(listaImoveis: List<Imovel>)
+alt Imóveis encontrados
+    tela_principal -> cliente: exibirListaImoveis(listaImoveis: List<Imovel>): void
 else Nenhum imóvel encontrado
-    tela_principal -> cliente: exibirMensagem("Nenhum imóvel encontrado")
+    tela_principal -> cliente: exibirMensagem("Nenhum imóvel encontrado"): void
 end
 
 == Cliente seleciona imóvel para detalhes ==
 
-cliente -> tela_principal: selecionarImovel(idImovel: Integer)
-tela_principal -> controle_imoveis: buscarDetalhesImovel(idImovel: Integer)
+cliente -> tela_principal: selecionarImovel(idImovel: Integer): void
+tela_principal -> tela_detalhes: abrirTelaDetalhesImovel(): void
+activate tela_detalhes
+
+tela_detalhes -> controle_imoveis: obterDetalhesImovel(idImovel: Integer): Imovel
 activate controle_imoveis
 
-controle_imoveis -> bd: consultarDetalhes(idImovel: Integer)
+controle_imoveis -> bd: consultarDetalhesImovel(idImovel: Integer): Imovel
 activate bd
 bd --> controle_imoveis: Imovel
 deactivate bd
 
-controle_imoveis --> tela_principal: Imovel
+controle_imoveis --> tela_detalhes: Imovel
 deactivate controle_imoveis
 
-tela_principal -> cliente: exibirDetalhesImovel(detalhesImovel: Imovel)
-
-deactivate tela_principal
+tela_detalhes -> cliente: exibirDetalhesImovel(detalhesImovel: Imovel): void
+deactivate tela_detalhes
 
 @enduml
