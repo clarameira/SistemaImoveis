@@ -50,6 +50,8 @@ class ControleImovel {
     +obterListaImoveis(): List<Imovel>
     +adicionarImovel(dados: Imovel): Boolean
     +buscarDetalhesImovel(id_imovel: String): Imovel
+    +atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): Boolean
+    +removerImovel(id_imovel: Integer): Boolean
 }
 
 class ControleReserva {
@@ -73,6 +75,8 @@ class ControleCadastro {
 class BancoDeDados {
     +consultarImoveis(filtros: String): List<Imovel>
     +inserirImovel(dados: Imovel): Boolean
+    +atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): Boolean
+    +deletarImovel(id_imovel: Integer): Boolean
     +consultarDetalhes(id_imovel: Integer): Imovel
     +consultarReservas(): List<Reserva>
     +processarPagamento(dados: String): Boolean
@@ -84,6 +88,14 @@ class TelaGerenciamentoImoveis {
     +acessarGerenciamentoImoveis(): void
     +exibirListaImoveis(listaImoveis: List<Imovel>): void
     +exibirMensagem(mensagem: String): void
+    +editarImovel(id_imovel: Integer, dadosAtualizados: Imovel): void
+    +removerImovel(id_imovel: Integer): void
+}
+
+class TelaGerenciamentoReserva {
+    +gerenciarReservas(): void
+    +exibirListaReservas(listaReservas: List<Reserva>): void
+    +atualizarStatusReserva(id_reserva: String, status: String): void
 }
 
 class TelaDetalhesImovel {
@@ -101,24 +113,41 @@ class TelaCadastro {
     +exibirMensagem(mensagem: String): void
 }
 
+class TelaPagamento {
+    +realizarPagamento(dados: String): Boolean
+    +exibirMensagem(mensagem: String): void
+}
+
 Locador "1" -- "*" Imovel: possui
 Cliente "1" -- "*" Reserva: faz
 Reserva "1" -- "1" Imovel: refere-se
 Reserva "1" -- "1" Pagamento: tem
-Imovel "*" -- "1" ControleImovel: gerenciado 
-Reserva "*" -- "1" ControleReserva: gerenciado 
-Pagamento "*" -- "1" ControlePagamento: processado 
+Imovel "*" -- "1" ControleImovel: gerenciado por
+Reserva "*" -- "1" ControleReserva: gerenciado por
+Pagamento "*" -- "1" ControlePagamento: processado por
 ControleImovel "1" -- "1" BancoDeDados: consulta
 ControleReserva "1" -- "1" BancoDeDados: consulta
 ControlePagamento "1" -- "1" BancoDeDados: consulta
-ControleLogin "1" -- "1" BancoDeDados: verifica 
-ControleCadastro "1" -- "1" BancoDeDados: salva 
+ControleLogin "1" -- "1" BancoDeDados: verifica credenciais
+ControleCadastro "1" -- "1" BancoDeDados: salva usuário
 
-TelaGerenciamentoImoveis "1" -- "1" ControleImovel: controla
-TelaGerenciamentoImoveis "1" -- "1" ControleReserva: controla
-TelaDetalhesImovel "1" -- "1" ControleImovel: controla
-TelaDetalhesImovel "1" -- "1" ControleReserva: controla
-TelaLogin "1" -- "1" ControleLogin: controla
-TelaCadastro "1" -- "1" ControleCadastro: controla
+TelaGerenciamentoImoveis "1" -- "1" ControleImovel: interage
+TelaGerenciamentoReserva "1" -- "1" ControleReserva: interage
+TelaDetalhesImovel "1" -- "1" ControleImovel: interage
+TelaDetalhesImovel "1" -- "1" ControleReserva: interage
+TelaLogin "1" -- "1" ControleLogin: interage
+TelaCadastro "1" -- "1" ControleCadastro: interage
+TelaPagamento "1" -- "1" ControlePagamento: interage
+
+Cliente "1" -- "1" TelaDetalhesImovel: acessa
+Cliente "1" -- "1" TelaGerenciamentoReserva: acessa
+Cliente "1" -- "1" TelaPagamento: acessa
+Cliente "1" -- "1" TelaLogin: acessa
+Cliente "1" -- "1" TelaCadastro: acessa
+
+Locador "1" -- "1" TelaGerenciamentoImoveis: acessa
+Locador "1" -- "1" TelaGerenciamentoReserva: acessa
+Locador "1" -- "1" TelaLogin: acessa
+Locador "1" -- "1" TelaCadastro: acessa
 
 @enduml
