@@ -1,0 +1,27 @@
+@startuml "Adicionar Imóvel"
+hide footbox
+
+actor Locador as locador
+participant "TelaGerenciamentoImoveis" as tela_gerenciamento
+participant "ControleImovel" as controle_imoveis
+participant "Imóvel" as imovel
+database "Banco de Dados" as bd
+
+locador -> tela_gerenciamento: acessarGerenciamentoImoveis(): void
+activate tela_gerenciamento
+tela_gerenciamento -> controle_imoveis: adicionarImovel(dados: Imovel): boolean
+activate controle_imoveis
+
+controle_imoveis -> bd: inserirImovel(dados: Imovel): boolean
+activate bd
+bd --> controle_imoveis: true
+deactivate bd
+deactivate imovel
+
+controle_imoveis --> tela_gerenciamento: true
+deactivate controle_imoveis
+
+tela_gerenciamento -> locador: exibirMensagem("Imóvel adicionado com sucesso"): void
+deactivate tela_gerenciamento
+
+@enduml

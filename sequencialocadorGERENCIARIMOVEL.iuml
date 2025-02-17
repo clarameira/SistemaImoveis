@@ -1,0 +1,25 @@
+@startuml "Acessar Gerenciamento de Imóveis"
+hide footbox
+
+actor Locador as locador
+participant "TelaGerenciamentoImoveis" as tela_gerenciamento
+participant "ControledeImoveis" as controle_imoveis
+database "BancoDeDados" as bd
+
+locador -> tela_gerenciamento: acessarGerenciamentoImoveis(): void
+activate tela_gerenciamento
+tela_gerenciamento -> controle_imoveis: obterListaImoveis(): List<Imovel>
+activate controle_imoveis
+
+controle_imoveis -> bd: consultarImoveisLocador(filtros: String): List<Imovel>
+activate bd
+bd --> controle_imoveis: List<Imovel>
+deactivate bd
+
+controle_imoveis --> tela_gerenciamento: List<Imovel>
+deactivate controle_imoveis
+
+tela_gerenciamento -> locador: exibirListaImoveis(listaImoveis: List<Imovel>): void
+deactivate tela_gerenciamento
+
+@enduml

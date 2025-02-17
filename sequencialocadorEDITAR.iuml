@@ -1,0 +1,25 @@
+@startuml "Editar Imóvel"
+hide footbox
+
+actor Locador as locador
+participant "TelaGerenciamentoImoveis" as tela_gerenciamento
+participant "ControleImovel" as controle_imoveis
+database "Banco de Dados" as bd
+
+locador -> tela_gerenciamento: editarImovel(id_imovel: Integer, dadosAtualizados: Imovel): void
+activate tela_gerenciamento
+tela_gerenciamento -> controle_imoveis: atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): boolean
+activate controle_imoveis
+
+controle_imoveis -> bd: atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): boolean
+activate bd
+bd --> controle_imoveis: true
+deactivate bd
+
+controle_imoveis --> tela_gerenciamento: true
+deactivate controle_imoveis
+
+tela_gerenciamento -> locador: exibirMensagem("Imóvel atualizado com sucesso"): void
+deactivate tela_gerenciamento
+
+@enduml

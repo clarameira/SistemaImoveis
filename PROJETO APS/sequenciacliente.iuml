@@ -25,7 +25,6 @@ deactivate bd
 controle_imovel --> tela_busca_imoveis
 deactivate controle_imovel
 
---Abrir TelaDetalhesImovel aqui ao invés de continuar na TelaGerenciamentoImoveis--
 tela_busca_imoveis -> tela_detalhes_imovel: selecionarImovel(id_imovel: String): void
 activate tela_detalhes_imovel
 

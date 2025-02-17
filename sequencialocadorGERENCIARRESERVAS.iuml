@@ -1,0 +1,40 @@
+@startuml "Gerenciar Reservas"
+hide footbox
+
+actor Locador as locador
+participant "TelaGerenciamentoReserva" as tela_gerenciamento
+participant "ControleReservas" as controle_reservas
+participant "Reserva" as reserva
+database "Banco de Dados" as bd
+
+locador -> tela_gerenciamento: gerenciarReservas(): void
+activate tela_gerenciamento
+tela_gerenciamento -> controle_reservas: obterReservas(): List<Reserva>
+activate controle_reservas
+
+controle_reservas -> bd: consultarReservas(): List<Reserva>
+activate bd
+bd --> controle_reservas: List<Reserva>
+deactivate bd
+
+controle_reservas --> tela_gerenciamento: List<Reserva>
+deactivate controle_reservas
+
+tela_gerenciamento -> locador: exibirListaReservas(listaReservas: List<Reserva>): void
+
+locador -> tela_gerenciamento: atualizarStatusReserva(id_reserva: String, status: String): void
+tela_gerenciamento -> controle_reservas: atualizarStatusReserva(id_reserva: String, status: String): boolean
+activate controle_reservas
+
+controle_reservas -> reserva: atualizarStatus(status: String): boolean
+activate reserva
+reserva --> controle_reservas: true
+deactivate reserva
+
+controle_reservas --> tela_gerenciamento: true
+deactivate controle_reservas
+
+tela_gerenciamento -> locador: exibirMensagem("Status atualizado com sucesso"): void
+deactivate tela_gerenciamento
+
+@enduml

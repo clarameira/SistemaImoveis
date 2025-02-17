@@ -1,0 +1,25 @@
+@startuml "Remover Imóvel"
+hide footbox
+
+actor Locador as locador
+participant "TelaGerenciamentoImoveis" as tela_gerenciamento
+participant "ControleImovel" as controle_imoveis
+database "Banco de Dados" as bd
+
+locador -> tela_gerenciamento: removerImovel(id_imovel: Integer): void
+activate tela_gerenciamento
+tela_gerenciamento -> controle_imoveis: removerImovel(id_imovel: Integer): boolean
+activate controle_imoveis
+
+controle_imoveis -> bd: deletarImovel(id_imovel: Integer): boolean
+activate bd
+bd --> controle_imoveis: true
+deactivate bd
+
+controle_imoveis --> tela_gerenciamento: true
+deactivate controle_imoveis
+
+tela_gerenciamento -> locador: exibirMensagem("Imóvel removido com sucesso"): void
+deactivate tela_gerenciamento
+
+@enduml
