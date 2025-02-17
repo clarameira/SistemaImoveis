@@ -1,22 +1,27 @@
 @startuml
+left to right direction
 
-class Locador {
+class Usuario {
     +id: Integer
     +nome: String
     +email: String
     +senha: String
+}
+
+class Locador {
+    +cnpj: String
     +gerenciarImoveis(): void
     +gerenciarReservas(): void
 }
 
 class Cliente {
-    +id: Integer
-    +nome: String
-    +email: String
-    +senha: String
+    +cpf: String
     +pesquisarImoveis(filtros: String): List<Imovel>
     +reservarImovel(id_imovel: String, datas: List<String>): void
 }
+
+Usuario <|-- Locador
+Usuario <|-- Cliente
 
 class Imovel {
     +id: Integer
@@ -119,7 +124,6 @@ class TelaPagamento {
 }
 
 Locador "1" -- "*" Imovel: possui
-Cliente "1" -- "*" Reserva: faz
 Reserva "1" -- "1" Imovel: refere-se
 Reserva "1" -- "1" Pagamento: tem
 Imovel "*" -- "1" ControleImovel: gerenciado por
