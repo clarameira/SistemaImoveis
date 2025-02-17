@@ -7,34 +7,59 @@ participant "ControleReservas" as controle_reservas
 participant "Reserva" as reserva
 database "Banco de Dados" as bd
 
+' Fluxo para obter reservas
 locador -> tela_gerenciamento: gerenciarReservas(): void
 activate tela_gerenciamento
 tela_gerenciamento -> controle_reservas: obterReservas(): List<Reserva>
 activate controle_reservas
 
-controle_reservas -> bd: consultarReservas(): List<Reserva>
+controle_reservas -> bd: consultarReservas(): List<Reserva> ou Erro
 activate bd
-bd --> controle_reservas: List<Reserva>
-deactivate bd
 
-controle_reservas --> tela_gerenciamento: List<Reserva>
-deactivate controle_reservas
+alt Consulta bem-sucedida
+    bd --> controle_reservas: List<Reserva>
+    deactivate bd
 
-tela_gerenciamento -> locador: exibirListaReservas(listaReservas: List<Reserva>): void
+    controle_reservas --> tela_gerenciamento: List<Reserva>
+    deactivate controle_reservas
 
+    tela_gerenciamento -> locador: exibirListaReservas(listaReservas: List<Reserva>): void
+else Falha na consulta
+    bd --> controle_reservas: Erro
+    deactivate bd
+
+    controle_reservas --> tela_gerenciamento: Erro
+    deactivate controle_reservas
+
+    tela_gerenciamento -> locador: exibirMensagemErro("Erro ao consultar reservas"): void
+end
+
+' Fluxo para atualizar status de reserva
 locador -> tela_gerenciamento: atualizarStatusReserva(id_reserva: String, status: String): void
 tela_gerenciamento -> controle_reservas: atualizarStatusReserva(id_reserva: String, status: String): boolean
 activate controle_reservas
 
-controle_reservas -> reserva: atualizarStatus(status: String): boolean
-activate reserva
-reserva --> controle_reservas: true
-deactivate reserva
+controle_reservas -> bd: atualizarStatusReserva(id_reserva: String, status: String): boolean
+activate bd
 
-controle_reservas --> tela_gerenciamento: true
-deactivate controle_reservas
+alt Atualização bem-sucedida
+    bd --> controle_reservas: true
+    deactivate bd
 
-tela_gerenciamento -> locador: exibirMensagem("Status atualizado com sucesso"): void
+    controle_reservas --> tela_gerenciamento: true
+    deactivate controle_reservas
+
+    tela_gerenciamento -> locador: exibirMensagem("Status atualizado com sucesso"): void
+else Falha na atualização
+    bd --> controle_reservas: false
+    deactivate bd
+
+    controle_reservas --> tela_gerenciamento: false
+    deactivate controle_reservas
+
+    tela_gerenciamento -> locador: exibirMensagemErro("Erro ao atualizar status da reserva"): void
+end
+
 deactivate tela_gerenciamento
 
 @enduml

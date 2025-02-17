@@ -8,18 +8,26 @@ database "Banco de Dados" as bd
 
 locador -> tela_gerenciamento: editarImovel(id_imovel: Integer, dadosAtualizados: Imovel): void
 activate tela_gerenciamento
+
 tela_gerenciamento -> controle_imoveis: atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): boolean
 activate controle_imoveis
 
 controle_imoveis -> bd: atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): boolean
 activate bd
-bd --> controle_imoveis: true
+
+bd --> controle_imoveis: sucesso ou falha (true/false)
 deactivate bd
 
-controle_imoveis --> tela_gerenciamento: true
-deactivate controle_imoveis
+alt Atualização bem-sucedida
+    controle_imoveis --> tela_gerenciamento: true
+    deactivate controle_imoveis
+    tela_gerenciamento -> locador: exibirMensagem("Imóvel atualizado com sucesso"): void
+else Falha na atualização
+    controle_imoveis --> tela_gerenciamento: false
+    deactivate controle_imoveis
+    tela_gerenciamento -> locador: exibirMensagem("Falha ao atualizar imóvel"): void
+end
 
-tela_gerenciamento -> locador: exibirMensagem("Imóvel atualizado com sucesso"): void
 deactivate tela_gerenciamento
 
 @enduml
