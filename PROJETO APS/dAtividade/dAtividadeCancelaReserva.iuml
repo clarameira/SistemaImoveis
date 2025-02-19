@@ -1,0 +1,17 @@
+@startuml
+start
+
+:Cliente acessa suas reservas;
+:Seleciona uma reserva para cancelar;
+:Sistema verifica status da reserva;
+if (Reserva pode ser cancelada?) then (Sim)
+    :Exibir opções de reembolso (se aplicável);
+    :Confirmar cancelamento;
+    :Atualizar status para 'Cancelada';
+    :Notificar locador e cliente;
+else (Não)
+    :Exibir mensagem 'Cancelamento não permitido';
+endif
+
+stop
+@enduml
