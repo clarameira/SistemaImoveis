@@ -1,0 +1,19 @@
+@startuml
+start
+:Cliente acessa a funcionalidade de busca;
+:Inserir filtros de busca;
+:Sistema consulta imóveis no banco de dados;
+repeat
+    backward:Notificar cliente que nenhum imóvel foi encontrado;
+    repeat while(Imovel encontrado?) is (Não) not (Sim)
+:Exibir resultados da busca;
+repeat
+    :Cliente escolhe imóvel e insere período desejado;
+    :Sistema verifica disponibilidade do imóvel nesse periodo;
+    backward:Notificar e permitir tentar outra data ou imóvel;
+    repeat while (Imóvel disponível?) is (Não) not (Sim)
+:Cliente confirma a reserva;
+:Criar reserva no sistema;
+:Notificar cliente sobre sucesso da reserva;
+stop
+@enduml

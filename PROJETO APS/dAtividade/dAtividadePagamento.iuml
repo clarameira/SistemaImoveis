@@ -1,0 +1,12 @@
+@startuml
+start
+:Cliente inicia pagamento;
+    repeat
+        :Solicitar dados de pagamento;
+        :Processar pagamento;
+        backward:Permitir nova tentativa de pagamento;
+    repeat while (Pagamento bem-sucedido?) is (Não) not (Sim)
+:Atualizar status da reserva para "pago";
+:Notificar cliente e locador;
+stop
+@enduml
