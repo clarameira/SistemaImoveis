@@ -1,0 +1,79 @@
+@startuml
+left to right direction
+
+class Usuario {
+    +id: Integer
+    +nome: String
+    +email: String
+    +senha: String
+}
+
+class Locador {
+    +cnpj: String
+    +gerenciarImoveis(): void
+    +gerenciarReservas(): void
+}
+
+class Cliente {
+    +cpf: String
+    +pesquisarImoveis(filtros: String): List<Imovel>
+    +reservarImovel(id_imovel: String, datas: List<String>): void
+}
+
+Usuario <|-- Locador
+Usuario <|-- Cliente
+
+class Imovel {
+    +id: Integer
+    +titulo: String
+    +descricao: String
+    +endereco: String
+    +preco: Float
+    +getDetalhes(): Imovel
+}
+
+class Reserva {
+    +id: Integer
+    +imovel: Imovel
+    +cliente: Cliente
+    +data_inicio: Date
+    +data_fim: Date
+    +status: String
+    +atualizarStatus(status: String): void
+}
+
+class Pagamento {
+    +id: Integer
+    +reserva: Reserva
+    +metodo: String
+    +status: String
+    +processarPagamento(dados: String): Boolean
+}
+
+class BancoDeDados {
+   +consultarImoveis(filtros: String): List<Imovel>
+    +inserirImovel(dados: Imovel): Boolean
+    +atualizarImovel(id_imovel: Integer, dadosAtualizados: Imovel): Boolean
+    +deletarImovel(id_imovel: Integer): Boolean
+    +consultarDetalhes(id_imovel: Integer): Imovel
+    +consultarReservas(): List<Reserva>
+    +inserirReserva(dados: Reserva): Boolean
+    +atualizarReserva(id_reserva: Integer, dadosAtualizados: Reserva): Boolean
+    +deletarReserva(id_reserva: Integer): Boolean
+    +processarPagamento(dados: String): Boolean
+    +verificarCredenciais(email: String, senha: String): Boolean
+    +salvarUsuario(dados: Cliente | Locador): Boolean
+    +editarUsuario(id_usuario: Integer, dadosAtualizados: Cliente | Locador): Boolean
+    +deletarUsuario(id_usuario: Integer): Boolean
+    +listarUsuarios(): List<Cliente | Locador>
+}
+
+Reserva "1" -- "1" Imovel: refere-se
+Reserva "1" -- "1" Cliente: realizada por
+Pagamento "1" -- "1" Reserva: relacionado
+Locador "1" -- "0..*" Imovel: gerencia
+BancoDeDados "1" -- "0..*" Imovel: persiste
+BancoDeDados "1" -- "0..*" Reserva: persiste
+BancoDeDados "1" -- "0..*" Usuario: persiste
+
+@enduml
