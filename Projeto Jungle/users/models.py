@@ -54,3 +54,25 @@ class Cliente(Usuario):
 
     def reservar_imovel(self, id_imovel, datas):
         pass  # Lógica para reserva de imóvel
+
+# users/models.py (ajustando para incluir Imovel e Reserva)
+
+from django.db import models
+
+class Imovel(models.Model):
+    nome = models.CharField(max_length=100)
+    endereco = models.CharField(max_length=255)
+    # Outros campos e definições para o imóvel
+
+    def __str__(self):
+        return self.nome
+
+class Reserva(models.Model):
+    imovel = models.ForeignKey(Imovel, on_delete=models.CASCADE)
+    data_inicio = models.DateTimeField()
+    data_fim = models.DateTimeField()
+    # Outros campos e definições para a reserva
+
+    def __str__(self):
+        return f"Reserva para {self.imovel.nome} de {self.data_inicio} a {self.data_fim}"
+
