@@ -1,11 +1,16 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
-from users.api.serializers import UserProfileExampleSerializer
+from users.api.serializers import UsuarioSerializer, LocadorSerializer, ClienteSerializer
+from users.models import Usuario,Locador,Cliente
 
-from users.models import UserProfileExample
+class UsuarioViewSet(ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
 
-class UserProfileExampleViewSet(ModelViewSet):
-    serializer_class = UserProfileExampleSerializer
-    permission_classes = [AllowAny]
-    queryset = UserProfileExample.objects.all()
-    http_method_names = ['get', 'put']
+class LocadorViewSet(ModelViewSet):
+    queryset = Locador.objects.all()
+    serializer_class = LocadorSerializer
+
+class ClienteViewSet(ModelViewSet):
+    queryset = Cliente.objects.all()
+    serializer_class = ClienteSerializer

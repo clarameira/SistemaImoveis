@@ -3,9 +3,9 @@ from imovel.api.serializers import ImovelSerializer, ReservaSerializer
 from imovel.models import Imovel, Reserva
 
 class ImovelViewSet(ModelViewSet):
-    serializer_class = ImovelSerializer
     queryset = Imovel.objects.all()
+    serializer_class = ImovelSerializer
 
 class ReservaViewSet(ModelViewSet):
-    serializer_class = ReservaSerializer
     queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer

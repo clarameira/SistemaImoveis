@@ -19,16 +19,17 @@ from django.urls import path
 from rest_framework.routers import SimpleRouter
 from rest_framework.authtoken import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from users.api.views import UserProfileExampleViewSet
+from users.api.views import UsuarioViewSet, LocadorViewSet, ClienteViewSet
 from imovel.api.views import ImovelViewSet, ReservaViewSet
 
 
 router = SimpleRouter()
 
-router.register("users", UserProfileExampleViewSet, basename="users")
-router.register("imovel", ImovelViewSet, basename="imovel")
-router.register("reserva", ReservaViewSet, basename="reserva")
-
+router.register('usuarios', UsuarioViewSet)
+router.register('locadores', LocadorViewSet)
+router.register('clientes', ClienteViewSet)
+router.register('imoveis', ImovelViewSet)
+router.register('reservas', ReservaViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
